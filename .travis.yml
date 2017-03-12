@@ -11,3 +11,6 @@ before_script:
   - pushd tests && ~/.cargo/bin/diesel migration run && popd
 env:
   - DATABASE_URL=postgres://postgres@127.0.0.1/travis_ci_test
+matrix:
+  allow_failures:
+    - rust: nightly
