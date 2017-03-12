@@ -6,11 +6,12 @@ extern crate dotenv;
 extern crate serde;
 extern crate serde_json;
 
+use std::env;
+
 use diesel::prelude::*;
 use diesel::insert;
 use diesel::pg::PgConnection;
 use dotenv::dotenv;
-
 
 infer_schema!("dotenv:DATABASE_URL");
 
@@ -42,8 +43,8 @@ fn can_be_deserialized() {
 #[test]
 fn can_be_inserted() {
     dotenv().ok();
-    let pg_url = "postgres://models_derive_test:password@127.0.0.1/models_derive_test";
-    let connection = PgConnection::establish(pg_url).unwrap();
+    let pg_url = env::var("DATABASE_URL").unwrap();
+    let connection = PgConnection::establish(&pg_url).unwrap();
     let default_insertable = NewTestTable {
         num: String::from("example")
     };
