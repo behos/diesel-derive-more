@@ -1,0 +1,31 @@
+[package]
+name = "models-derive"
+version = "0.1.0"
+authors = ["Giorgos Georgiou <4.blood@gmail.com>"]
+
+[lib]
+proc-macro = true
+
+[dependencies]
+syn = "0.11.4"
+quote = "0.3.12"
+
+[dependencies.diesel_codegen]
+version = "0.11.0"
+features = ["postgres"]
+
+[dependencies.diesel]
+version = "0.11.2"
+features = ["postgres", "chrono"]
+
+[dependencies.serde]
+version = "0.9.7"
+
+[dependencies.serde_derive]
+version = "0.9.7"
+
+[dev-dependencies.dotenv]
+version = "0.8.0"
+
+[dev-dependencies.serde_json]
+version = "0.9.6"
