@@ -5,6 +5,10 @@ rust:
   - nightly
 services:
   - postgresql
+script:
+  - cargo build --verbose
+  - cargo test --verbose
+  - cargo test --verbose --features=serde_derive
 before_script:
   - cargo install diesel_cli
   - psql -c 'create database travis_ci_test;' -U postgres

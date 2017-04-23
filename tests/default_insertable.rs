@@ -1,10 +1,10 @@
 #[macro_use] extern crate diesel;
 #[macro_use] extern crate diesel_codegen;
 #[macro_use] extern crate models_derive;
-#[macro_use] extern crate serde_derive;
+
+#[cfg(feature="serialization")] #[macro_use] extern crate serde_derive;
+
 extern crate dotenv;
-extern crate serde;
-extern crate serde_json;
 
 use std::env;
 
@@ -33,14 +33,6 @@ fn does_not_have_auto_increment_fields() {
 
 
 #[test]
-fn can_be_deserialized() {
-    let json = r#"{"num": "example"}"#;
-    let from_json: NewTestTable = serde_json::from_str(json).unwrap();
-    assert_eq!(from_json.num, "example")
-}
-
-
-#[test]
 fn can_be_inserted() {
     dotenv().ok();
     let pg_url = env::var("DATABASE_URL").unwrap();
@@ -52,4 +44,20 @@ fn can_be_inserted() {
     let res: TestTable = insert(&default_insertable)
         .into(test_table::table).get_result(&connection).unwrap();
     assert_eq!(res.num, default_insertable.num)
+}
+
+#[cfg(feature="serialization")]
+mod serialization_tests {
+    
+    extern crate serde;
+    extern crate serde_json;
+
+    use super::NewTestTable;
+
+    #[test]
+    fn can_be_deserialized() {
+        let json = r#"{"num": "example"}"#;
+        let from_json: NewTestTable = serde_json::from_str(json).unwrap();
+        assert_eq!(from_json.num, "example")
+    }
 }

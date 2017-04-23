@@ -94,7 +94,8 @@ pub fn impl_default_insertable(ast: &MacroInput) -> Tokens {
             }
 
             quote!(
-                #[derive(Clone, Insertable, Deserialize)]
+                #[derive(Clone, Insertable)]
+                #[cfg_attr(feature="serialization", derive(Deserialize))]
                 #table_name_attribute
                 pub struct #impl_generics #name #ty_generics #where_clause {
                     #(#args),*

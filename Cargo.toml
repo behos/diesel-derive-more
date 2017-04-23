@@ -6,6 +6,9 @@ authors = ["Giorgos Georgiou <4.blood@gmail.com>"]
 [lib]
 proc-macro = true
 
+[features]
+serialization = ["serde", "serde_derive"]
+
 [dependencies]
 syn = "*"
 quote = "*"
@@ -13,6 +16,14 @@ quote = "*"
 [dependencies.diesel]
 version = "*"
 features = ["postgres", "chrono"]
+
+[dependencies.serde]
+version = "*"
+optional = true
+
+[dependencies.serde_derive]
+version = "*"
+optional = true
 
 [dev-dependencies.dotenv]
 version = "*"
@@ -23,9 +34,3 @@ version = "*"
 [dev-dependencies.diesel_codegen]
 version = "*"
 features = ["postgres"]
-
-[dev-dependencies.serde]
-version = "*"
-
-[dev-dependencies.serde_derive]
-version = "*"

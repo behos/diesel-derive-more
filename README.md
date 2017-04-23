@@ -8,6 +8,7 @@ This package provides some helpers for working with diesel models.
 
 * DefaultInsertable: Creates a default struct to use as an insertable model
 * DBEnum: Allows serializing and deserializing enums for DB storage
+* Deserialization for default insertable through the 'serialization' feature
 
 This is work in progress (created to support one of my projects) so it will continue to evolve.
 
