@@ -7,25 +7,25 @@ authors = ["Giorgos Georgiou <4.blood@gmail.com>"]
 proc-macro = true
 
 [dependencies]
-syn = "0.11.4"
-quote = "0.3.12"
-
-[dependencies.diesel_codegen]
-version = "0.11.0"
-features = ["postgres"]
+syn = "*"
+quote = "*"
 
 [dependencies.diesel]
-version = "0.11.2"
+version = "*"
 features = ["postgres", "chrono"]
 
-[dependencies.serde]
-version = "0.9.7"
-
-[dependencies.serde_derive]
-version = "0.9.7"
-
 [dev-dependencies.dotenv]
-version = "0.8.0"
+version = "*"
 
 [dev-dependencies.serde_json]
-version = "0.9.6"
+version = "*"
+
+[dev-dependencies.diesel_codegen]
+version = "*"
+features = ["postgres"]
+
+[dev-dependencies.serde]
+version = "*"
+
+[dev-dependencies.serde_derive]
+version = "*"

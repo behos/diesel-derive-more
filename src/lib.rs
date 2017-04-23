@@ -6,9 +6,7 @@
 
 
 #[macro_use] extern crate quote;
-#[macro_use] extern crate diesel;
-#[macro_use] extern crate diesel_codegen;
-#[macro_use] extern crate serde_derive;
+extern crate diesel;
 extern crate proc_macro;
 extern crate syn;
 
