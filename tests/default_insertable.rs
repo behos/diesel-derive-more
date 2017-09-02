@@ -1,3 +1,5 @@
+#![recursion_limit="128"]
+
 #[macro_use] extern crate diesel;
 #[macro_use] extern crate diesel_codegen;
 #[macro_use] extern crate models_derive;

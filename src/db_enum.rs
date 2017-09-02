@@ -24,6 +24,7 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
     let from_sql = quote!(::diesel::types::FromSql); 
     let from_sql_row = quote!(::diesel::types::FromSqlRow);
     let to_sql = quote!(::diesel::types::ToSql); 
+    let to_sql_output = quote!(::diesel::types::ToSqlOutput); 
     let error = quote!(Box<::std::error::Error+Send+Sync>);
     let text = quote!(::diesel::types::Text);
     let row = quote!(::diesel::row::Row);
@@ -43,16 +44,17 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
             }        
         }
 
-        
         impl<DB: #backend> #to_sql<#text, DB> for #name
             where for<'a> &'a str: #to_sql<#text, DB> {
-            fn to_sql<W: #write>(&self, output: &mut W) -> Result<#is_null, #error> {
+            fn to_sql<'a, W: #write>(
+                &self, output: &mut #to_sql_output<'a, W, DB>
+            ) -> Result<#is_null, #error> {
                 let write_string = #value_matcher_write;
                 write_string.to_sql(output)
             }
         }
 
-        expression_impls!(Text -> #name,);
+        expression_impls!(Text -> #name);
     }
 }
 
