@@ -32,6 +32,7 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
     let is_null = quote!(::diesel::types::IsNull);
 
     quote! {
+
         impl<DB: #backend<RawValue=[u8]>> #from_sql<#text, DB> for #name {
             fn from_sql(value: Option<&[u8]>) -> Result<Self, #error> {
                 #value_matcher_read
@@ -54,7 +55,8 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
             }
         }
 
-        expression_impls!(Text -> #name);
+        use ::diesel::types::Text as DBEnumText;
+        expression_impls!(DBEnumText -> #name);
     }
 }
 
