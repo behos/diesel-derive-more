@@ -14,7 +14,7 @@ syn = "*"
 quote = "*"
 
 [dependencies.diesel]
-# version = "*"
+version = "*"
 features = ["postgres"]
 git = "https://github.com/diesel-rs/diesel"
 
