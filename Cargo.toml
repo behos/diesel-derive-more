@@ -14,8 +14,9 @@ syn = "*"
 quote = "*"
 
 [dependencies.diesel]
-version = "*"
-features = ["postgres", "chrono"]
+# version = "*"
+features = ["postgres"]
+git = "https://github.com/diesel-rs/diesel"
 
 [dependencies.serde]
 version = "*"
@@ -34,3 +35,4 @@ version = "*"
 [dev-dependencies.diesel_codegen]
 version = "*"
 features = ["postgres"]
+git = "https://github.com/diesel-rs/diesel"

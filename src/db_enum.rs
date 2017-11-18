@@ -12,7 +12,7 @@ pub fn impl_db_enum(ast: &MacroInput) -> Tokens {
     let name = &ast.ident;
     match ast.body {
         Enum(ref variants) => impl_diesel_traits(name, variants),
-        _ => panic!("Doesn't work with structs")
+        _ => panic!("Doesn't work with structs"),
     }
 }
 
@@ -21,10 +21,10 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
     let value_matcher_write = impl_value_matcher_write(name, variants);
 
     let backend = quote!(::diesel::backend::Backend);
-    let from_sql = quote!(::diesel::types::FromSql); 
+    let from_sql = quote!(::diesel::types::FromSql);
     let from_sql_row = quote!(::diesel::types::FromSqlRow);
-    let to_sql = quote!(::diesel::types::ToSql); 
-    let to_sql_output = quote!(::diesel::types::ToSqlOutput); 
+    let to_sql = quote!(::diesel::types::ToSql);
+    let to_sql_output = quote!(::diesel::types::ToSqlOutput);
     let error = quote!(Box<::std::error::Error+Send+Sync>);
     let text = quote!(::diesel::types::Text);
     let row = quote!(::diesel::row::Row);
@@ -45,13 +45,12 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
             }        
         }
 
-        impl<DB: #backend> #to_sql<#text, DB> for #name
-            where for<'a> &'a str: #to_sql<#text, DB> {
-            fn to_sql<'a, W: #write>(
-                &self, output: &mut #to_sql_output<'a, W, DB>
+        impl<DB: #backend> #to_sql<#text, DB> for #name {
+            fn to_sql<W: #write>(
+                &self, output: &mut #to_sql_output<W, DB>
             ) -> Result<#is_null, #error> {
                 let write_string = #value_matcher_write;
-                write_string.to_sql(output)
+                #to_sql::<#text, DB>::to_sql(write_string, output)
             }
         }
 
