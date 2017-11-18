@@ -22,12 +22,10 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
 
     let backend = quote!(::diesel::backend::Backend);
     let from_sql = quote!(::diesel::types::FromSql);
-    let from_sql_row = quote!(::diesel::types::FromSqlRow);
     let to_sql = quote!(::diesel::types::ToSql);
     let to_sql_output = quote!(::diesel::types::ToSqlOutput);
     let error = quote!(Box<::std::error::Error+Send+Sync>);
     let text = quote!(::diesel::types::Text);
-    let row = quote!(::diesel::row::Row);
     let write = quote!(::std::io::Write);
     let is_null = quote!(::diesel::types::IsNull);
 
@@ -39,12 +37,6 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
             }
         }
 
-        impl<DB: #backend<RawValue=[u8]>> #from_sql_row<#text, DB> for #name {
-            fn build_from_row<R: #row<DB>>(row: &mut R) -> Result<Self, #error> {
-                #from_sql::<#text, DB>::from_sql(row.take())
-            }        
-        }
-
         impl<DB: #backend> #to_sql<#text, DB> for #name {
             fn to_sql<W: #write>(
                 &self, output: &mut #to_sql_output<W, DB>
@@ -53,8 +45,10 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
                 #to_sql::<#text, DB>::to_sql(write_string, output)
             }
         }
-
+        
         use ::diesel::types::Text as DBEnumText;
+
+        queryable_impls!(DBEnumText -> #name);
         expression_impls!(DBEnumText -> #name);
     }
 }
