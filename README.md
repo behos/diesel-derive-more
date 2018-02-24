@@ -1,6 +1,6 @@
-# models-derive
+# diesel-derive-more
 
-[![Build Status](https://travis-ci.org/behos/models-derive.svg?branch=master)](https://travis-ci.org/behos/models-derive)
+[![Build Status](https://travis-ci.org/behos/diesel-derive-more.svg?branch=master)](https://travis-ci.org/behos/diesel-derive-more)
 
 This package provides some helpers for working with diesel models.
 

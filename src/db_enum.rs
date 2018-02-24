@@ -4,30 +4,30 @@
 
 
 use quote::Tokens;
-use syn::{Ident, Variant, MacroInput};
-use syn::Body::Enum;
+use syn::{Ident, Variant, DeriveInput, DataEnum};
+use syn::Data::Enum;
+use syn::punctuated::Punctuated;
+use syn::token::Comma;
 
 
-pub fn impl_db_enum(ast: &MacroInput) -> Tokens {
+pub fn impl_db_enum(ast: &DeriveInput) -> Tokens {
     let name = &ast.ident;
-    match ast.body {
-        Enum(ref variants) => impl_diesel_traits(name, variants),
-        _ => panic!("Doesn't work with structs")
+    match ast.data {
+        Enum(DataEnum { ref variants, .. }) => impl_diesel_traits(name, &variants),
+        _ => panic!("Doesn't work with structs"),
     }
 }
 
-fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
+fn impl_diesel_traits(name: &Ident, variants: &Punctuated<Variant, Comma>) -> Tokens {
     let value_matcher_read = impl_value_matcher_read(name, variants);
     let value_matcher_write = impl_value_matcher_write(name, variants);
 
     let backend = quote!(::diesel::backend::Backend);
-    let from_sql = quote!(::diesel::types::FromSql); 
-    let from_sql_row = quote!(::diesel::types::FromSqlRow);
-    let to_sql = quote!(::diesel::types::ToSql); 
-    let to_sql_output = quote!(::diesel::types::ToSqlOutput); 
+    let from_sql = quote!(::diesel::types::FromSql);
+    let to_sql = quote!(::diesel::serialize::ToSql);
+    let to_sql_output = quote!(::diesel::serialize::Output);
     let error = quote!(Box<::std::error::Error+Send+Sync>);
-    let text = quote!(::diesel::types::Text);
-    let row = quote!(::diesel::row::Row);
+    let text = quote!(::diesel::sql_types::Text);
     let write = quote!(::std::io::Write);
     let is_null = quote!(::diesel::types::IsNull);
 
@@ -39,28 +39,20 @@ fn impl_diesel_traits(name: &Ident, variants: &[Variant]) -> Tokens {
             }
         }
 
-        impl<DB: #backend<RawValue=[u8]>> #from_sql_row<#text, DB> for #name {
-            fn build_from_row<R: #row<DB>>(row: &mut R) -> Result<Self, #error> {
-                #from_sql::<#text, DB>::from_sql(row.take())
-            }        
-        }
-
         impl<DB: #backend> #to_sql<#text, DB> for #name
-            where for<'a> &'a str: #to_sql<#text, DB> {
-            fn to_sql<'a, W: #write>(
-                &self, output: &mut #to_sql_output<'a, W, DB>
+            where str: #to_sql<#text, DB>,
+        {
+            fn to_sql<W: #write>(
+                &self, output: &mut #to_sql_output<W, DB>
             ) -> Result<#is_null, #error> {
                 let write_string = #value_matcher_write;
-                write_string.to_sql(output)
+                str::to_sql(&write_string, output)
             }
         }
-
-        use ::diesel::types::Text as DBEnumText;
-        expression_impls!(DBEnumText -> #name);
     }
 }
 
-fn impl_value_matcher_read(name: &Ident, variants: &[Variant]) -> Tokens {
+fn impl_value_matcher_read(name: &Ident, variants: &Punctuated<Variant, Comma>) -> Tokens {
     let error_handlers = impl_error_handlers();
     let variant_handlers = variants.iter().map(|v| {
         let variant_name = &v.ident;
@@ -80,7 +72,7 @@ fn impl_value_matcher_read(name: &Ident, variants: &[Variant]) -> Tokens {
     )
 }
 
-fn impl_value_matcher_write(name: &Ident, variants: &[Variant]) -> Tokens {
+fn impl_value_matcher_write(name: &Ident, variants: &Punctuated<Variant, Comma>) -> Tokens {
     let variant_handlers = variants.iter().map(|v| {
         let variant_name = &v.ident;
         quote!(&#name::#variant_name => stringify!(#variant_name))
