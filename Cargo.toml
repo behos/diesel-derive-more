@@ -1,10 +1,10 @@
 [package]
 name = "diesel-derive-more"
-version = "1.1.0"
+version = "1.1.1"
 authors = ["Giorgos Georgiou <giorgos.georgiou@outlook.com>"]
 description = "Additional derives to use with diesel to remove some boilerplate code"
 repository = "https://github.com/behos/diesel-derive-more"
-keywords = ["diesel", "sql"]
+keywords = ["diesel", "sql", "enum", "insertable"]
 license = "Apache-2.0"
 
 [lib]
