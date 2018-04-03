@@ -4,6 +4,9 @@
 //!
 //! The new struct is prefixed with 'New' and lives in the same module as the
 //! original struct.
+//!
+//! When using the serialization feature, the stuct is also serializable through
+//! serde
 
 use quote::Tokens;
 use syn::{DeriveInput, Ident, Field, Attribute, DataStruct};

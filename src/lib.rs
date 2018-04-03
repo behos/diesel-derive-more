@@ -1,8 +1,22 @@
 #![recursion_limit = "128"]
-//! Diesel Derive More
+//! # Diesel Derive More
 //!
 //! Additional derive functionality for the diesel
 //! models which make it easier to get started
+//!
+//! ## DBEnum
+//!
+//! Represents an enum type as strings in the database. This allows the type to
+//! be used in all cases. Check the db_enum module docs for additional information
+//!
+//! ## DefaultInsertable
+//!
+//! Creates a new struct which can be used for insertions.
+//! Check the default_inserable module docs for additional information
+//!
+//! ## Examples
+//!
+//! For examples of usage check the corresponding tests in the tests/ dir
 
 
 #[macro_use]
