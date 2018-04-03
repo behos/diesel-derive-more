@@ -6,13 +6,21 @@
 //!
 //! ## DBEnum
 //!
-//! Represents an enum type as strings in the database. This allows the type to
-//! be used in all cases. Check the db_enum module docs for additional information
+//! DBEnum provides diesel implementations for using an enum as a string field
+//! in models. Deriving DBEnum in an enum provides serializationa and
+//! deserialization traits.
 //!
 //! ## DefaultInsertable
 //!
-//! Creates a new struct which can be used for insertions.
-//! Check the default_inserable module docs for additional information
+//! Default insertable provides a default implementation for a diesel model
+//! It allows marking fields as auto_increment so that they are excluded from
+//! the derived struct.
+//!
+//! The new struct is prefixed with 'New' and lives in the same module as the
+//! original struct.
+//!
+//! When using the serialization feature, the stuct is also serializable through
+//! serde
 //!
 //! ## Examples
 //!

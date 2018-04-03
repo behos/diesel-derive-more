@@ -1,8 +1,3 @@
-//! DBEnum provides diesel implementations for using an enum as a string field
-//! in models. Deriving DBEnum in an enum provides serializationa and
-//! deserialization traits.
-
-
 use quote::Tokens;
 use syn::{Ident, Variant, DeriveInput, DataEnum};
 use syn::Data::Enum;
