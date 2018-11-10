@@ -1,3 +1,9 @@
+# Deprecation notice
+
+**Other packages are providing the same functionality now**
+
+It's been a while since I started this package and it appears that other packages have come up which offer the same functionality and more.
+
 # diesel-derive-more
 
 [![Build Status](https://travis-ci.org/behos/diesel-derive-more.svg?branch=master)](https://travis-ci.org/behos/diesel-derive-more)
